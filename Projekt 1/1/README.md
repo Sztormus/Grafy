@@ -1,4 +1,3 @@
 # Część pierwsza
-Treść: Napisać program do sprawdzania, czy dana sekwencja liczb naturalnych
-jest ciągiem graficznym, i do konstruowania grafu prostego o stopniach
-wierzchołków zadanych przez ciąg graficzny
+Treść: Napisać program kodujący grafy proste za pomocą macierzy sąsiedztwa, macierzy incydencji i list sąsiędztwa. Stworzyć moduł do zmiany danego kodowania na pozostałe.
+
