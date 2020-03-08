@@ -1,0 +1,18 @@
+digraph G
+{
+	layout="circo";
+	node [shape = circle];
+	N0 -> N1 [arrowhead=none][style=invis][constraint=false]
+	N1 -> N2 [arrowhead=none][style=invis][constraint=false]
+	N2 -> N3 [arrowhead=none][style=invis][constraint=false]
+	N3 -> N4 [arrowhead=none][style=invis][constraint=false]
+	N4 -> N5 [arrowhead=none][style=invis][constraint=false]
+	N5 -> N0 [arrowhead=none][style=invis][constraint=false]
+	N1 -> N0 [arrowhead=none]
+	N5 -> N0 [arrowhead=none]
+	N2 -> N1 [arrowhead=none]
+	N4 -> N1 [arrowhead=none]
+	N3 -> N2 [arrowhead=none]
+	N4 -> N3 [arrowhead=none]
+	N5 -> N4 [arrowhead=none]
+}
