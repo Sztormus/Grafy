@@ -13,6 +13,7 @@ using namespace std;
 
 Graph::Graph(std::string input)
 {
+	srand(time(NULL));
 	istringstream iss(input);
 	vector<string> results((istream_iterator<string>(iss)), istream_iterator<std::string>());
 	size = results.size();
@@ -75,12 +76,12 @@ bool Graph::Check()
 }
 
 void Graph::BuildGraph()
-{
-	srand(time(NULL));
-	
+{	
 	int* tab = new int[size];
-	int node = 0;
 	int flag = 0;
+	int node = 0;
+	int index = 0;
+	bool check = true;
 	
 	adjacencyList = new AdjacencyList(size);
 	adjacencyMatrix = new AdjacencyMatrix(size);
@@ -89,35 +90,52 @@ void Graph::BuildGraph()
 	for(int i = 0; i < size; ++i)
 		tab[i] = series[i];
 		
-	for(int i = 0; i < size; ++i)
+	while(true)
 	{
-		flag = 0;
-		while(tab[i] > 0)
+		check = true;
+		index = 0;
+		for(int i = 0; i < size; ++i)
+		{
+			if(tab[index] < tab[i])
+				index = i;
+		}
+		
+		while(tab[index] > 0)
 		{
 			node = rand()%size;
-			++flag;
-			
-			if(flag == size)
+			if(node != index && tab[node] > 0 && !adjacencyMatrix->edgeExists(index, node))
 			{
-				adjacencyList = new AdjacencyList(size);
-				adjacencyMatrix = new AdjacencyMatrix(size);
-				incidenceMatrix = new IncidenceMatrix(size);
-	
-				for(int j = 0; j < size; ++j)
-					tab[j] = series[j];
-				i = -1;
-				break;
-			}
-			
-			if(i != node && !adjacencyMatrix->edgeExists(i, node) && tab[node] > 0)
-			{
-				adjacencyMatrix->setEdge(i, node);
-				adjacencyList->setEdge(i, node);
-				incidenceMatrix->setEdge(i, node);
-				--tab[i];
+				flag = 0;
+				adjacencyMatrix->setEdge(node, index);
+				adjacencyList->setEdge(node, index);
+				incidenceMatrix->setEdge(node, index);
 				--tab[node];
+				--tab[index];
+			}
+			else
+			{
+				++flag;
+				if(flag > size * size)
+				{
+					delete adjacencyList;
+					delete adjacencyMatrix;
+					delete incidenceMatrix;
+					
+					BuildGraph();
+					
+					return;
+				}
 			}
 		}
+		
+		for(int i = 0; i < size; ++i)
+		{
+			if(tab[i] != 0)
+				check = false;
+		}
+		
+		if(check)
+			break;
 	}
 	
 	adjacencyMatrix->print();
