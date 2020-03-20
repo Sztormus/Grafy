@@ -3,6 +3,7 @@
 #include <cstdio>
 #include <cstdlib>
 #include <ctime>
+#include <stack>
 
 using namespace std;
 
@@ -68,6 +69,110 @@ Digraph::Digraph(int n, double p): size(n)
 			cout << wages[i][0] << "-" << wages[i][1] << ": " << wages[i][2] << endl;
 		}
 		cout << endl;
+	}
+}
+
+int* Digraph::Kosaraju()
+{
+	int* f = new int[size];
+	int* d = new int[size];
+	int* comp = new int[size];
+	int t = 0;
+	int nr = 0;
+	
+	for(int v = 0; v < size; ++v)
+	{
+		f[v] = -1;
+		d[v] = -1;
+	}
+	
+	for(int v = 0; v < size; ++v)
+	{
+		if(d[v] == -1)
+		{
+			Visit(v, t, d, f);
+		}
+	}
+
+	for(int v = 0; v < size; ++v)
+		comp[v] = -1;
+		
+	bool* check = new bool[size];
+	stack<int> S;
+	int index;
+	int value;
+	
+	for(int v = 0; v < size; ++v)
+		check[v] = false;
+		
+	while(S.size() < size)
+	{
+		index = -1;
+		value = INT_MIN;
+		
+		for(int i = 0; i < size; ++i)
+		{
+			if(f[i] > value && check[i] == false)
+			{
+				value = f[i];
+				index = i;
+			}
+		}
+		
+		check[index] = true;
+		S.push(index);
+	}
+	
+	while(!S.empty())
+	{
+		int v = S.top();
+		S.pop();
+		
+		if(comp[v] == -1)
+		{
+			++nr;
+			comp[v] = nr;
+			Components(nr, v, comp);
+		}
+	}
+	
+	delete[] d;
+	delete[] f;
+	delete[] check;
+	
+	return comp;
+}
+
+void Digraph::Visit(int v, int& t, int* d, int* f)
+{
+	++t;
+	d[v] = t;
+			
+	for(int u = 0; u < size; ++u)
+	{
+		if(adjacencyMatrix->edgeExists(v, u))
+		{
+			if(d[u] == -1)
+				Visit(u, t, d, f);
+		}
+	}
+	
+	++t;
+	f[v] = t;
+}
+
+void Digraph::Components(int& nr, int v, int* comp)
+{
+	for(int u = 0; u < size; ++u)
+	{
+		if(adjacencyMatrix->edgeExists(u, v))
+		{
+			if(comp[u] == -1)
+			{
+				comp[u] = nr;
+				Components(nr, u, comp);
+			}
+		}
 	}
 }
 
