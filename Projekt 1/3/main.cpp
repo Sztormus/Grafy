@@ -35,8 +35,6 @@ int main()
     	Graph G(n, l);
         G.generate();
 	    G.printGraph();
-
-		return 0;
 	}
 
 	else if (a==2)
@@ -61,15 +59,12 @@ int main()
     	Graph G(n, l, p);
         G.generateWithProbability();
 	    G.printGraph();
-
-		return 0;
 	}
 
 	else
 	{
 		std::cout << "\nWprowadzono nieprawidłowy znak" << std::endl;
-		return 0;
 	}
 
-
+	return 0;
 }
