@@ -38,3 +38,15 @@ Projekt 1/1/input.txt
 Projekt 2/1/output1.dot
 Projekt 2/1/output2.dot
 *.dot
+Projekt 5/1/.vs/1/v16/.suo
+Projekt 5/1/.vs/1/v16/Browse.VC.db
+*.ipch
+*.sln
+*.vcxproj
+*.filters
+*.user
+*.tlog
+*.ilk
+*.log
+*.pdb
+*.idb
