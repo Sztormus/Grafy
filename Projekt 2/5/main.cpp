@@ -10,7 +10,7 @@ int main() {
     cout<<"Podaj stopień: ";
     cin>>k;
     while(k<0 || k>=n) {
-        cout <<"Niepoprawny stopień!"<<endl<<"Podaj stopień ponownie: ";
+        cout<<"Niepoprawny stopień!"<<endl<<"Podaj stopień ponownie: ";
         cin>>k;
     }
     string input = "";
@@ -29,11 +29,11 @@ int main() {
 		if(k!=0 && k!=n-1) graph.Shuffle(rand()%10);
 		graph.DrawGraph("output2.dot");
 
-        cout<<"Wynik znajduje sie w pliku output2.dot"<<endl;
+        	cout<<"Wynik znajduje sie w pliku output2.dot"<<endl;
 	}
 	else {
 		cout << "Podany ciag nie jest ciagiem graficznym." << endl;
-    }
-
+    	}
+	
 	return 0;
 }
