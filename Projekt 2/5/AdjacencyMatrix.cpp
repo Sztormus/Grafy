@@ -7,9 +7,9 @@ AdjacencyMatrix::~AdjacencyMatrix()
 {
 	for(int i=0; i<nodes; i++)
 	{
-		delete Representation[i];
+		delete[] Representation[i];
 	}
-	delete Representation;
+	delete[] Representation;
 }
 
 AdjacencyMatrix::AdjacencyMatrix(int n)
@@ -54,4 +54,3 @@ void AdjacencyMatrix::print()
 	cout << "-------------------\n";
 
 }
-

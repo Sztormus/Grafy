@@ -1,8 +1,6 @@
 #pragma once
 
-#include "AdjacencyList.h"
 #include "AdjacencyMatrix.h"
-#include "IncidenceMatrix.h"
 #include <string>
 
 class Graph  
