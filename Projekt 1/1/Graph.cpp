@@ -32,11 +32,25 @@ Graph::Graph(std::string input)
 	if(line[1] == ':')
 	{
 		cout << "Lista sasiedzwtwa" << endl;
+		size_t pos = 0;
+		string token;
+		string delimiter = " ";
 		adjacencyList = new AdjacencyList(size);
-		for(int i = 0; i < size; ++i)
+		for (int i = 0; i < size; ++i)
 		{
-			for(int j = 3; j < line.length(); j += 2)
-				adjacencyList->setEdge(i, (int)(line[j] - '0'));
+			line.erase(0, line.find(":") + 2);
+			pos = 0;
+			token = "";
+			while ((pos = line.find(delimiter)) != -1)
+			{
+				token = line.substr(0, pos);
+				adjacencyList->setEdge(i, atoi(token.c_str()));
+				line.erase(0, pos + delimiter.length());
+			}
+			if(line != " ")
+			{
+				adjacencyList->setEdge(i, atoi(line.c_str()));
+			}
 			getline(wej, line);
 		}
 		adjacencyList->print();
