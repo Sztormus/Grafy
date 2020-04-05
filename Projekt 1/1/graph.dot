@@ -2,12 +2,12 @@ digraph G
 {
 	layout="circo";
 	node [shape = circle];
-	N0 -> N1 [arrowhead=none][style=invis][constraint=false]
-	N1 -> N2 [arrowhead=none][style=invis][constraint=false]
-	N2 -> N3 [arrowhead=none][style=invis][constraint=false]
-	N3 -> N4 [arrowhead=none][style=invis][constraint=false]
-	N4 -> N5 [arrowhead=none][style=invis][constraint=false]
-	N5 -> N0 [arrowhead=none][style=invis][constraint=false]
+	N0 -> N1 [arrowhead=none][style=invis]
+	N1 -> N2 [arrowhead=none][style=invis]
+	N2 -> N3 [arrowhead=none][style=invis]
+	N3 -> N4 [arrowhead=none][style=invis]
+	N4 -> N5 [arrowhead=none][style=invis]
+	N5 -> N0 [arrowhead=none][style=invis]
 	N1 -> N0 [arrowhead=none]
 	N5 -> N0 [arrowhead=none]
 	N2 -> N1 [arrowhead=none]
