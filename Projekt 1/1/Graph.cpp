@@ -29,7 +29,7 @@ Graph::Graph(std::string input)
 	check = line;
 	
 	cout << "Reprezentacja grafu: ";
-	if(line[1] == ':')
+	if(line.find(":") != string::npos)
 	{
 		cout << "Lista sasiedzwtwa" << endl;
 		size_t pos = 0;
@@ -41,7 +41,7 @@ Graph::Graph(std::string input)
 			line.erase(0, line.find(":") + 2);
 			pos = 0;
 			token = "";
-			while ((pos = line.find(delimiter)) != -1)
+			while ((pos = line.find(delimiter)) != string::npos)
 			{
 				token = line.substr(0, pos);
 				adjacencyList->setEdge(i, atoi(token.c_str()));
