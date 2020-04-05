@@ -7,13 +7,13 @@ using namespace std;
 
 AdjacencyList::~AdjacencyList()
 {
-	delete nodeEdges;
 	for (int i = 0; i < nodes; i++)
 	{
 		if (nodeEdges[i] > 0)
-			delete Representation[i];
+			delete[] Representation[i];
 	}
-	delete Representation;
+	delete[] Representation;
+	delete[] nodeEdges;
 }
 
 AdjacencyList::AdjacencyList(int n)
@@ -53,8 +53,7 @@ void AdjacencyList::setEdge(int n1, int n2)
 				newArray[i] = Representation[n1][i];
 			}
 			newArray[nodeEdges[n1]] = n2;
-			delete Representation[n1];
-			Representation[n1] = new int[nodeEdges[n1]+1];
+			delete[] Representation[n1];
 			Representation[n1] = newArray;
 			nodeEdges[n1]++;
 		}
@@ -74,8 +73,7 @@ void AdjacencyList::setEdge(int n1, int n2)
 				newArray[i] = Representation[n2][i];
 			}
 			newArray[nodeEdges[n2]] = n1;
-			delete Representation[n2];
-			Representation[n2] = new int[nodeEdges[n2]+1];
+			delete[] Representation[n2];
 			Representation[n2] = newArray;
 			nodeEdges[n2]++;
 		}

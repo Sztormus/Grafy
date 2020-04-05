@@ -17,10 +17,10 @@ IncidenceMatrix::~IncidenceMatrix()
 	{
 		for (int i = 0; i < nodes; i++)
 		{
-			delete Representation[i];
+			delete[] Representation[i];
 		}
 	}
-	delete Representation;
+	delete[] Representation;
 }
 
 void IncidenceMatrix::setEdge(int n1, int n2)
@@ -66,16 +66,15 @@ void IncidenceMatrix::setEdge(int n1, int n2)
 		}
 
 		if (edges == 1) //nie utworzylismy wczesniej tablic dla elementow, a wiec wystarczy
-			delete Representation;
+			delete[] Representation;
 		else
 		{
 			for (int i = 0; i < nodes; i++)
 			{
-				delete Representation[i];
+				delete[] Representation[i];
 			}
-			delete Representation;
+			delete[] Representation;
 		}
-		Representation = new int*[nodes];
 		Representation = newMatrix;
 	}
 }
