@@ -1,3 +1,6 @@
+// Grafy2_3.cpp : Ten plik zawiera funkcję „main”. W nim rozpoczyna się i kończy wykonywanie programu.
+//
+
 #include "pch.h"
 #include <iostream>
 #include <list>
@@ -26,13 +29,13 @@ int main()
 		{
 			cout << "Podany ciag jest ciagiem graficznym." << endl;
 			graph.BuildGraph();
-			cout << "Okreslamy najwieksza spojna skladowa." << endl;
-			int nr = 0;								
-			int * comp = Components(&graph, &nr);
-			int* elements = new int[nr];
+			cout << "Spojne skladowe:" << endl;
+			int component_nr = 0;								
+			int * comp = Components(&graph, &component_nr);
+			int* elements = new int[component_nr];
 			int max = 0;
 
-			for (int i = 1; i <= nr; i++)
+			for (int i = 1; i <= component_nr; i++)
 			{
 				int sum = 0;
 				cout << i << ": ";
@@ -40,7 +43,7 @@ int main()
 				{
 					if (comp[j] == i)
 					{
-						cout << j + 1 << ", ";
+						cout << j + 1 << " ";
 						sum++;
 					}
 				}
@@ -53,17 +56,17 @@ int main()
 			}
 
 			cout << endl << "Najwieksza(e) spojna(e) skladowa(e): ";
-			for (int i = 1; i <= nr; i++)
+			for (int i = 1; i <= component_nr; i++)
 			{
 				if (elements[i-1] == max)
-					cout << i << ", ";
+					cout << i << " ";
 			}
 			cout << endl;
 			graph.DrawGraph("output.dot");
 		}
 		else
 		{
-			cout << "Podany ciag nie jest ciagiem graficznym. Koniec." << endl;
+			cout << "Podany ciag nie jest ciagiem graficznym." << endl;
 		}
 	}
 }
