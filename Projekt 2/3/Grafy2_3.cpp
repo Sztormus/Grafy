@@ -1,6 +1,3 @@
-﻿// Grafy2_3.cpp : Ten plik zawiera funkcję „main”. W nim rozpoczyna się i kończy wykonywanie programu.
-//
-
 #include "pch.h"
 #include <iostream>
 #include <list>
@@ -16,52 +13,71 @@ void Components_r(int nr, int v, Graph* g, int** comp);
 int main()
 {
 	string input;
-	cout << "Podaj ciag: ";
-	getline(cin, input);
-
-	Graph graph(input);
-	if (graph.Check())
+	while (true)
 	{
-		cout << "Podany ciag jest ciagiem graficznym." << endl;
-		graph.BuildGraph();
-		cout << "Okreslamy najwieksza spojna skladowa." << endl;
-		int nr = 0;
-		int * comp = Components(&graph, &nr);
-		int max = 0;
+		cout << "Podaj ciag: ";
+		getline(cin, input);
+		if (input == "q")
+			break;
 
-		for (int i = 1; i <= nr; i++)
+		Graph graph(input);
+	
+		if (graph.Check())
 		{
-			int sum = 0;
-			cout << nr << ": ";
-			for (int j = 0; j < graph.size; j++)
+			cout << "Podany ciag jest ciagiem graficznym." << endl;
+			graph.BuildGraph();
+			cout << "Okreslamy najwieksza spojna skladowa." << endl;
+			int nr = 0;								
+			int * comp = Components(&graph, &nr);
+			int* elements = new int[nr];
+			int max = 0;
+
+			for (int i = 1; i <= nr; i++)
 			{
-				if (comp[j] == nr)
+				int sum = 0;
+				cout << i << ": ";
+				for (int j = 0; j < graph.size; j++)
 				{
-					cout << j+1 << ", ";
-					sum++;
+					if (comp[j] == i)
+					{
+						cout << j + 1 << ", ";
+						sum++;
+					}
+				}
+				cout << endl;
+				elements[i - 1] = sum;
+				if (sum > max)
+				{
+					max = sum;
 				}
 			}
-			cout << endl;
-			if (sum > max) max = nr;
-		}
-		cout << endl << "Najwieksza spojna skladowa ma numer " << max << endl;
 
-	}
-	else
-	{
-		cout << "Podany ciag nie jest ciagiem graficznym. Koniec." << endl;
+			cout << endl << "Najwieksza(e) spojna(e) skladowa(e): ";
+			for (int i = 1; i <= nr; i++)
+			{
+				if (elements[i-1] == max)
+					cout << i << ", ";
+			}
+			cout << endl;
+			graph.DrawGraph("output.dot");
+		}
+		else
+		{
+			cout << "Podany ciag nie jest ciagiem graficznym. Koniec." << endl;
+		}
 	}
 }
 
 int* Components(Graph* g, int* nr)
 {
-	int el = g->size;
+	//iloc wierzcholkow
+	int el = g->size;			
 	int *comp = new int[el];
 	for (int i = 0; i < el; i++)
 	{
+		//elementy nie naleza jeszcze do skladowych
 		comp[i] = -1;
-	}
-	//elementy nie naleza jeszcze do skladowych
+	}	
 	//dla kazdego wierzcholka w grafie
 	for (int v = 0; v < el; v++)
 	{
