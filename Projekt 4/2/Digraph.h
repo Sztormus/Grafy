@@ -18,7 +18,7 @@ private:
 	
 	Digraph() = default;
 	void Visit(int v, int& t, int* d, int* f);
-	void Components(int& nr, int v, int* comp);
+	void Components(int& nr, int v, int* comp, AdjacencyMatrix& Gt);
 
 public:
 	Digraph(int n, double p);

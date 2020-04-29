@@ -74,6 +74,7 @@ Digraph::Digraph(int n, double p): size(n)
 
 int* Digraph::Kosaraju()
 {
+	AdjacencyMatrix Gt(size);
 	int* f = new int[size];
 	int* d = new int[size];
 	int* comp = new int[size];
@@ -94,6 +95,19 @@ int* Digraph::Kosaraju()
 		}
 	}
 
+	for(int i = 0; i < size; ++i)
+	{
+		for(int j = 0; j < size; ++j)
+		{
+			if(i == j)
+				continue;
+			if(adjacencyMatrix->edgeExists(i, j))
+			{
+				Gt.setEdge(j, i);
+			}
+		}
+	}
+
 	for(int v = 0; v < size; ++v)
 		comp[v] = -1;
 		
@@ -108,11 +122,11 @@ int* Digraph::Kosaraju()
 	while(S.size() < size)
 	{
 		index = -1;
-		value = INT_MIN;
+		value = INT_MAX;
 		
 		for(int i = 0; i < size; ++i)
 		{
-			if(f[i] > value && check[i] == false)
+			if(f[i] < value && check[i] == false)
 			{
 				value = f[i];
 				index = i;
@@ -132,7 +146,7 @@ int* Digraph::Kosaraju()
 		{
 			++nr;
 			comp[v] = nr;
-			Components(nr, v, comp);
+			Components(nr, v, comp, Gt);
 		}
 	}
 	
@@ -150,7 +164,7 @@ void Digraph::Visit(int v, int& t, int* d, int* f)
 			
 	for(int u = 0; u < size; ++u)
 	{
-		if(adjacencyMatrix->edgeExists(v, u))
+		if(u != v && adjacencyMatrix->edgeExists(v, u))
 		{
 			if(d[u] == -1)
 				Visit(u, t, d, f);
@@ -161,16 +175,16 @@ void Digraph::Visit(int v, int& t, int* d, int* f)
 	f[v] = t;
 }
 
-void Digraph::Components(int& nr, int v, int* comp)
+void Digraph::Components(int& nr, int v, int* comp, AdjacencyMatrix& Gt)
 {
 	for(int u = 0; u < size; ++u)
 	{
-		if(adjacencyMatrix->edgeExists(u, v))
+		if(u != v && Gt.edgeExists(v, u))
 		{
 			if(comp[u] == -1)
 			{
 				comp[u] = nr;
-				Components(nr, u, comp);
+				Components(nr, u, comp, Gt);
 			}
 		}
 	}
