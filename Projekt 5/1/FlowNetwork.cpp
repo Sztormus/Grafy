@@ -22,7 +22,10 @@ FlowNetwork::FlowNetwork(int N): layerNumber(N + 2)
 
 	for(int i = 1; i < layerNumber - 1; ++i)
 	{
-		layers[i] = rand() % (N - 2) + 3;
+		if (layerNumber == 2)
+			layers[i] = 2;
+		else
+			layers[i] = rand() % (N - 1) + 2;
 		cout << "Warstwa " << i << ": " << layers[i] << " wierzcholkow" << endl;
 		nodeNumber += layers[i];
 	}
@@ -112,17 +115,17 @@ FlowNetwork::FlowNetwork(int N): layerNumber(N + 2)
 	}
 
 	k = 0;
-
-	while(k < 2 * layerNumber)
+	
+	while (k < 2 * layerNumber)
 	{
 		int rand1, rand2;
 
-		while(true)
+		while (true)
 		{
 			rand1 = rand() % nodeNumber;
 			rand2 = rand() % nodeNumber;
 
-			if(rand1 != rand2 && rand1 != nodeNumber - 1 && rand2 != 0 && !adjacencyMatrix->edgeExists(rand1, rand2))
+			if (rand1 != rand2 && rand1 != nodeNumber - 1 && rand2 != 0 && !adjacencyMatrix->edgeExists(rand1, rand2) && !adjacencyMatrix->edgeExists(rand2, rand1))
 				break;
 		}
 
