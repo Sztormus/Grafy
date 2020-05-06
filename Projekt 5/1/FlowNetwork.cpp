@@ -184,6 +184,18 @@ FlowNetwork::FlowNetwork(int N): layerNumber(N + 2)
 
 void FlowNetwork::DrawNetwork(std::string file)
 {
+	int**c = nullptr;
+	c = new int*[nodeNumber];
+	for (int i = 0; i < nodeNumber; i++)
+		c[i] = new int[nodeNumber];
+
+	for (int i = 0; i < nodeNumber; i++)
+		for (int j = 0; j < nodeNumber; j++)
+			c[i][j] = 0;
+
+	for (int i = 0; i < edgeNumber; i++)
+		c[wages[i][0]][wages[i][1]] = wages[i][2];
+
 	ofstream wyj(file);
 
 	wyj << "digraph G" << endl << "{" << endl;
@@ -196,7 +208,7 @@ void FlowNetwork::DrawNetwork(std::string file)
 			if(i == j)
 				continue;
 			if(adjacencyMatrix->edgeExists(i, j))
-				wyj << "	N" << i << " -> N" << j << endl;
+				wyj << "	N" << i << " -> N" << j << " [ label=\"" << c[i][j] << "\"]" << endl;
 		}
 	}
 	wyj << "}";
@@ -204,6 +216,10 @@ void FlowNetwork::DrawNetwork(std::string file)
 	cout << "Wygenerowano skrypt o nazwie '" << file << "' dla sieci przeplywow o liczbie wierzcholkow: " << nodeNumber << endl;
 
 	wyj.close();
+
+	for (int i = 0; i < nodeNumber; i++)
+		delete[] c[i];
+	delete[] c;
 }
 
 FlowNetwork::~FlowNetwork()
