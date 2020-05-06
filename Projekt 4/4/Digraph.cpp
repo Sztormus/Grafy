@@ -124,7 +124,7 @@ int* Digraph::Kosaraju()
 	while(S.size() < size)
 	{
 		index = -1;
-		value = INT_MAX;
+		value = INT_MAX/2;
 		
 		for(int i = 0; i < size; ++i)
 		{
@@ -329,18 +329,20 @@ bool Digraph::Bellman_Ford(int** G_prim, int (*wages)[3], int s){
 	ds = new int[size];
 	ps = new int[size];
 	for(int i = 0; i < size; ++i) {
-		ds[i] = INT_MAX;
+		ds[i] = INT_MAX/2;
 		ps[i] = -1;
 	}
 	ds[s] = 0;
 
-	for(int i = 0; i < size; ++i) {
-		for(int j = 0; j < size; ++j) {
-			if( edgeExists(G_prim, i, j) ){
-				//RElAX
-				if (ds[j] > ds[i] + getWage(i, j)) {
-					ds[j] = ds[i] + getWage(i, j);
-					ps[j] = i;
+	for(int l = 1; l<size; l++){
+		for(int i = 0; i < size; ++i) {
+			for(int j = 0; j < size; ++j) {
+				if( edgeExists(G_prim, i, j) ){
+					//RElAX
+					if (ds[j] > ds[i] + getWage(i, j)) {
+						ds[j] = ds[i] + getWage(i, j);
+						ps[j] = i;
+					}
 				}
 			}
 		}
@@ -358,7 +360,7 @@ bool Digraph::Bellman_Ford(int** G_prim, int (*wages)[3], int s){
 void Digraph::setWage(int a, int b, int value){
 	for(int i = 0; i < edgeNumber; ++i){
 		if(wages[i][0] == a && wages[i][1] == b) {
-			wages[i][2] = rand()%15-5;
+			wages[i][2] = value;
 			break;
 		}
 	}
@@ -420,17 +422,17 @@ int* Digraph::Dijkstra(int start){
 
 	for (int i = 0; i < size; ++i)
 	{
-		d[i] = INT_MAX;
+		d[i] = INT_MAX/2;
 		p[i] = -1;
 	}
 	d[start] = 0;
 
 	int u = -1;
-	int dist = INT_MAX;
+	int dist = INT_MAX/2;
 	while (S.size() < size)
 	{
 		u = -1;
-		dist = INT_MAX;
+		dist = INT_MAX/2;
 		for (int i = 0; i < size; ++i)
 		{
 			if (d[i] < dist && S.count(i) == 0)
@@ -516,7 +518,7 @@ int** Digraph::Johnson(){
 
 	edgeNumber+=size;
 	size++;
-	if ( Bellman_Ford(G_prim, wages, size-1) ){
+	if ( !Bellman_Ford(G_prim, wages, size-1) ){
 		int**D = nullptr;
 		return D;
 	}
