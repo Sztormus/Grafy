@@ -22,7 +22,10 @@ FlowNetwork::FlowNetwork(int N): layerNumber(N + 2)
 
 	for(int i = 1; i < layerNumber - 1; ++i)
 	{
-		layers[i] = rand() % (N - 2) + 3;
+		if (layerNumber == 2)
+			layers[i] = 2;
+		else
+			layers[i] = rand() % (N - 1) + 2;
 		cout << "Warstwa " << i << ": " << layers[i] << " wierzcholkow" << endl;
 		nodeNumber += layers[i];
 	}
@@ -112,17 +115,17 @@ FlowNetwork::FlowNetwork(int N): layerNumber(N + 2)
 	}
 
 	k = 0;
-
-	while(k < 2 * layerNumber)
+	
+	while (k < 2 * layerNumber)
 	{
 		int rand1, rand2;
 
-		while(true)
+		while (true)
 		{
 			rand1 = rand() % nodeNumber;
 			rand2 = rand() % nodeNumber;
 
-			if(rand1 != rand2 && rand1 != nodeNumber - 1 && rand2 != 0 && !adjacencyMatrix->edgeExists(rand1, rand2))
+			if (rand1 != rand2 && rand1 != nodeNumber - 1 && rand2 != 0 && !adjacencyMatrix->edgeExists(rand1, rand2) && !adjacencyMatrix->edgeExists(rand2, rand1))
 				break;
 		}
 
@@ -181,6 +184,18 @@ FlowNetwork::FlowNetwork(int N): layerNumber(N + 2)
 
 void FlowNetwork::DrawNetwork(std::string file)
 {
+	int**c = nullptr;
+	c = new int*[nodeNumber];
+	for (int i = 0; i < nodeNumber; i++)
+		c[i] = new int[nodeNumber];
+
+	for (int i = 0; i < nodeNumber; i++)
+		for (int j = 0; j < nodeNumber; j++)
+			c[i][j] = 0;
+
+	for (int i = 0; i < edgeNumber; i++)
+		c[wages[i][0]][wages[i][1]] = wages[i][2];
+
 	ofstream wyj(file);
 
 	wyj << "digraph G" << endl << "{" << endl;
@@ -193,7 +208,7 @@ void FlowNetwork::DrawNetwork(std::string file)
 			if(i == j)
 				continue;
 			if(adjacencyMatrix->edgeExists(i, j))
-				wyj << "	N" << i << " -> N" << j << endl;
+				wyj << "	N" << i << " -> N" << j << " [ label=\"" << c[i][j] << "\"]" << endl;
 		}
 	}
 	wyj << "}";
@@ -201,6 +216,10 @@ void FlowNetwork::DrawNetwork(std::string file)
 	cout << "Wygenerowano skrypt o nazwie '" << file << "' dla sieci przeplywow o liczbie wierzcholkow: " << nodeNumber << endl;
 
 	wyj.close();
+
+	for (int i = 0; i < nodeNumber; i++)
+		delete[] c[i];
+	delete[] c;
 }
 
 FlowNetwork::~FlowNetwork()
