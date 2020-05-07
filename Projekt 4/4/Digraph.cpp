@@ -196,6 +196,7 @@ void Digraph::Components(int& nr, int v, int* comp, AdjacencyMatrix& Gt)
 void Digraph::selectConnectedGraph(int* comp, int k){
 	int tab[size]{-1};
 	int it = 0;
+	cout << "Wybrano składową zawierającą wierzchołki: " ;
 	for(int i = 0; i<size; i++){
 		if (comp[i] == k) {
 			tab[it] = i;
@@ -204,8 +205,9 @@ void Digraph::selectConnectedGraph(int* comp, int k){
 		}
 	}
 	cout<<endl;
+
 	if (it==1){
-		cout << "Nie znaleziono silnie spójnej składowej\n" ;
+		cout << "Nie znaleziono silnie spójnej składowej, która miałaby co najmniej 2 wierzchołki.\n" ;
 		exit(-1);
 	}
 
@@ -255,9 +257,11 @@ void Digraph::selectConnectedGraph(int* comp, int k){
 		}
 		size=it;
 		edgeNumber = edgeNumber0;
+		incidenceMatrix->print();
 	}
+	else
+		cout << "Macierz incydencji pozostaje bez zmian" << endl;
 	
-	incidenceMatrix->print();
 	cout << "Ilosc krawedzi w spójnej składowej: " << edgeNumber << endl << "Ilość wierzchołków w spójnej składowej: " << size << endl;
 	cout << "-------------------\n";
 
@@ -288,7 +292,6 @@ void Digraph::selectConnectedGraph(int* comp, int k){
 		{
 			cout << wages[i][0] << "-" << wages[i][1] << ": " << wages[i][2] << endl;
 		}
-		cout << endl;
 	}
 	cout << "-------------------\n";
 }
@@ -350,7 +353,7 @@ bool Digraph::Bellman_Ford(int** G_prim, int (*wages)[3], int s){
 	for(int i = 0; i < size; ++i) {
 		for(int j = 0; j < size; ++j) {
 			if( edgeExists(G_prim, i, j) ){
-				if(ds[i] > ds[j] + getWage(i, j)) return false;
+				if(ds[j] > ds[i] + getWage(i, j)) return false;
 			}
 		}
 	}
@@ -420,8 +423,7 @@ int* Digraph::Dijkstra(int start){
 	int* p = new int[size];
 	set<int> S;
 
-	for (int i = 0; i < size; ++i)
-	{
+	for (int i = 0; i < size; ++i){
 		d[i] = INT_MAX/2;
 		p[i] = -1;
 	}
@@ -429,39 +431,31 @@ int* Digraph::Dijkstra(int start){
 
 	int u = -1;
 	int dist = INT_MAX/2;
-	while (S.size() < size)
-	{
+	while (S.size() < size){
 		u = -1;
 		dist = INT_MAX/2;
-		for (int i = 0; i < size; ++i)
-		{
-			if (d[i] < dist && S.count(i) == 0)
-			{
+		for (int i = 0; i < size; ++i){
+			if (d[i] < dist && S.count(i) == 0){
 				dist = d[i];
 				u = i;
 			}
 		}
 		S.insert(u);
 
-		for (int v = 0; v < size; ++v)
-		{
+		for (int v = 0; v < size; ++v){
 			if (v == u)
 				continue;
-			if (S.count(v) == 0 && incidenceMatrix->edgeExists(u, v))
-			{
+			if (S.count(v) == 0 && incidenceMatrix->edgeExists(u, v)){
 				int k = 0;
-				while (true)
-				{
-					if ((wages[k][0] == u && wages[k][1] == v) || (wages[k][0] == v && wages[k][1] == u))
-					{
+				while (true){
+					if (wages[k][0] == u && wages[k][1] == v){
 						break;
 					}
 					else
 						++k;
 				}
 
-				if (d[v] > d[u] + wages[k][2])
-				{
+				if (d[v] > d[u] + wages[k][2]){
 					d[v] = d[u] + wages[k][2];
 					p[v] = u;
 				}
@@ -475,7 +469,6 @@ int* Digraph::Dijkstra(int start){
 int** Digraph::Johnson(){
 	int** G_prim = add_s();
 	int edgeNumber_prim = edgeNumber + size;
-	int size_prim = size + 1;
 	int (*wages_prim)[3] = new int[edgeNumber_prim][3];
 	for (int k=0; k<edgeNumber; k++){
 		wages_prim[k][0] = wages[k][0];
@@ -496,16 +489,16 @@ int** Digraph::Johnson(){
 		wages[k][2] = 0;
 	}
 
-	cout << "G_prim" << endl;
-	for (int i=0; i<(size_prim); i++){
-		for (int j=0; j<(edgeNumber_prim); j++){
-			if(G_prim[i][j] == 1 || G_prim[i][j] == 0)
-				cout << " " << G_prim[i][j] << " ";
-			else
-				cout << G_prim[i][j] << " ";
-		}
-		cout << endl;
-	}
+	// cout << "G_prim" << endl;
+	// for (int i=0; i<(size+1); i++){
+	// 	for (int j=0; j<(edgeNumber_prim); j++){
+	// 		if(G_prim[i][j] == 1 || G_prim[i][j] == 0)
+	// 			cout << " " << G_prim[i][j] << " ";
+	// 		else
+	// 			cout << G_prim[i][j] << " ";
+	// 	}
+	// 	cout << endl;
+	// }
 	// cout << "-------------------\n";
 	// if(edgeNumber_prim > 0){
 	// 	cout << "Wagi dla poszczegolnych krawedzi:" << endl;
@@ -518,9 +511,11 @@ int** Digraph::Johnson(){
 
 	edgeNumber+=size;
 	size++;
+
 	if ( !Bellman_Ford(G_prim, wages, size-1) ){
 		int**D = nullptr;
 		return D;
+		
 	}
 	else{
 		int* h = new int[size];
@@ -560,4 +555,7 @@ Digraph::~Digraph()
 	delete adjacencyMatrix;
 	delete incidenceMatrix;
 	delete[] wages;
+	delete ds;
+	delete ps;
+	delete newNodes;
 }
