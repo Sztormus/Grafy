@@ -66,6 +66,11 @@ Graph::Graph(std::string input)
 		}
 		
 	}
+
+	// for(int i = 0; i < size; ++i){
+	// 	cout << x_coordinate[i] << " " << y_coordinate[i] << endl;
+	// }
+
 }
 
 double Graph::CalculateWage(int i, int j){
@@ -88,10 +93,10 @@ void Graph::MixHamilton(int a, int b, int c, int d){
 	for(int i = 0; i < size+1; ++i){
 		mixed_circuit[i] = circuit[i];
 	}
-	mixed_circuit[a] = c;
-	mixed_circuit[b] = d;
-	mixed_circuit[c] = a;
-	mixed_circuit[d] = b;
+	mixed_circuit[a] = circuit[c];
+	mixed_circuit[b] = circuit[d];
+	mixed_circuit[c] = circuit[a];
+	mixed_circuit[d] = circuit[b];
 }
 
 double Graph::SumWages(int* name){
@@ -99,7 +104,8 @@ double Graph::SumWages(int* name){
 	for(int i = 1; i < size; ++i){
 		temp += adjacencyMatrix->getEdge(name[i-1], name[i]);	
 	}
-	temp += adjacencyMatrix->getEdge(name[size-1], name[size]);	
+	temp += adjacencyMatrix->getEdge(name[size-1], name[size]);
+	temp += adjacencyMatrix->getEdge(name[size], name[0]);	
 	return temp;
 }
 
@@ -116,7 +122,7 @@ double Graph::Annealing(){
 	for (int i=100; i>= 1; i--){
 		srand( time( NULL ) );
 		T = 0.001*i*i;
-		for (int it=0; it<10000; it++){
+		for (int it=0; it<30000; it++){
 			a = rand()%size;
 			if(a!=199) b = a+1;
 			else b=0;
@@ -127,6 +133,10 @@ double Graph::Annealing(){
 			else d=0;
 
 			MixHamilton(a, b, c, d);
+
+			// for(int i = 1; i < size; ++i)
+			// 	cout << mixed_circuit[i] << " ";
+			// cout << "\n\n";
 
 			mixed_wages = SumWages(mixed_circuit);
 			if ( mixed_wages < wages ){
@@ -151,10 +161,11 @@ double Graph::Annealing(){
 void Graph::DrawGraph(std::string file){
 	ofstream wyj(file);
 
-	for(int i = 0; i < size+1; ++i){
+	for(int i = 0; i < size; ++i){
 		wyj << x_coordinate[circuit[i]] << "\t" << y_coordinate[circuit[i]] << endl;
 	}
-	
+	wyj << x_coordinate[circuit[0]] << "\t" << y_coordinate[circuit[0]] << endl;
+
 	cout << "Wygenerowano skrypt o nazwie '" << file << "' dla grafu o liczbie wierzcholkow: " << size << endl;
 	
 	wyj.close();
